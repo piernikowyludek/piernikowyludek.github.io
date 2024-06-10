@@ -38,6 +38,13 @@ I’m following the lying_and_detection_results notebook (link) from the officia
 Let’s clarify - we’re using the questions where 1) the model could answer it correctly; 2) the double down rate was high enough; 3) we managed to collect both truth and lie log probs for it. 
 We end up with small test sets of just a few hundred examples for the different models.
 
+![Binary Lie Detector](/images/binary_lie_detector.png)
+![LogProb Lie Detector](/images/logprob_lie_detector.png)
+
+![BinaryROC](/images/binary_ROC.png)
+![LogProbROC](/images/logprob_ROC.png)
+
+
 ## Follow-up experiments 
 An interesting follow up experiment would be to fine-tune an LLM to circumvent the lie detector.
 Scenario: Imagine your lie detector or the follow-up questions are leaked and become PUBLIC. A malicious actor fine-tunes an LLM so that the model always responds to the follow-up questions as if it was telling the truth.
