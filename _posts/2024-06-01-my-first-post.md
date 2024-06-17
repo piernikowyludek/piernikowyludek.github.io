@@ -117,11 +117,11 @@ Steps:
 *Note: I was going to run this experiment myself but it turns out that GPT-4o inference is x5 more expensive than GPT-3.5-turbo. Verifying whether the lie detector still works for GPT-4o completely has obliterated my $250 budget for this project.*
 
 ## Could this be implemented in a real-world application?
-Starting with *pros**:
+:green_circle:*Pros:*:green_circle:
 + Very little training data is required for the Logistic Regression model training
 + No need to retrain the lie detector for a different LLM - just need to collect a validation set and find the right decision threshold. So the model could be useful as a protective layer above an LLM we have access to.
 
-*Limitations*:
+:red_circle:*Limitations:*:red_circle:
 - Implementation would be slow and expensive in practice 
 The solution is unfortunately quite impractical - it requires asking 48 follow-up questions possibly after each back and forth with an LLM. There are optimisations to be had if you had access to the model inference code and not used a model via an API. But even then it is quite costly. We could try to find a set of the fewest questions that are still effective at catching lies.  
 - Decision threshold dependency: in practice it only works with known LLMs that you’ve set a decision threshold for
