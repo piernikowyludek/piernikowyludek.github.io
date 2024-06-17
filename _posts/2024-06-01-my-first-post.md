@@ -75,8 +75,8 @@ This is very different from how a regular user would ever converse with a Langua
 ![Binary Lie Detector](/images/binary_lie_detector.png)
 ![LogProb Lie Detector](/images/logprob_lie_detector.png)
 
-<img src="/images/binary_ROC.png" alt="BinaryROC" width="250" />
-<img src="/images/logprob_ROC.png" alt="LogProbROC" width="250" />
+<img src="/images/binary_ROC.png" alt="BinaryROC" width="450" />
+<img src="/images/logprob_ROC.png" alt="LogProbROC" width="450" />
 
 The paper reported AUC scores for the different models which indeed suggests that the lie detector generalizes very well across different LLMs. But when I printed out a generic set of metrics like Accuracy, Precision and Recall computed at the default threshold of 0.5 by scikit-learn’s functions it raised my eyebrows. 
 
