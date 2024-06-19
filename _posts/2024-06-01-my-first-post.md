@@ -86,6 +86,10 @@ While AUC looks pretty good for all of the models - which means that for each of
 ![Confusion Matrices](/images/confusion_mxs.jpg)
 Here are Confusion Matrices for each model at the most optimal decision threshold showing us the best possible performance we could theoretically squeeze out of the lie detector.
 
+![Histograms](/images/histograms.png)
+The histograms above show the prediction probabilities of the logprob_difference logistic regression for the 4 models. See how radically different the distributions of the probability values are for different LLMs. GPT-3.5-turbo and GPT-4o's distributions are somewhat similar but alpaca and vicuna suggest these input might as well be OOD for the classifier. Also the two classes are not nearly as well separated for models other than the GPT-class.
+Again, this doesn't mean that this approach to catching lies isn't effective. But I wouldn't say it straightforwardly generalizes to other LLMs out-of-the box.
+
 ## Patterns in Probing Questions answers
 ![Probing Questions](/images/probing_questions.png)
 
@@ -117,15 +121,35 @@ Steps:
 *Note: I was going to run this experiment myself but it turns out that GPT-4o inference is x5 more expensive than GPT-3.5-turbo. Verifying whether the lie detector still works for GPT-4o completely has obliterated my $250 budget for this project.*
 
 ## Could this be implemented in a real-world application?
-:green_circle: **Pros:** :green_circle:
+🟢 **Pros:** 
 + Very little training data is required for the Logistic Regression model training
 + No need to retrain the lie detector for a different LLM - just need to collect a validation set and find the right decision threshold. So the model could be useful as a protective layer above an LLM we have access to.
++ The accuracy is quite high - high enough to potentially use this lie detector is some sort of Human-in-the-loop setting
 
-:red_circle: **Limitations:** :red_circle:
-- Implementation would be slow and expensive in practice 
-The solution is unfortunately quite impractical - it requires asking 48 follow-up questions possibly after each back and forth with an LLM. There are optimisations to be had if you had access to the model inference code and not used a model via an API. But even then it is quite costly. We could try to find a set of the fewest questions that are still effective at catching lies.  
+🔴 **Limitations:** 
+- Implementation would be slow and expensive in practice.
+I'll analyse the cost and processing time for calling the OpenAI API given that both the authors and I have used this technique. I'm sure both the cost and processing time could be improved if you have access to the LLM and can write a custom inference code. Nevertheless, asking 48 follow-up questions is an extra computational burden that's hard to omit.\
+\
+Cost per 100 queries\
+\
+Simple question and answer:\
+avg_truth/lie_prompt + avg_question_len = 80 + 90 = 170 words \
+avg_answers = 110 words\
+API call: 0.8 sec\
+GPT-4o: $0.35\
+GPT-3.5-turbo: $0.04\
+\
+Question, answer, and 48 follow-up questions and anwers:\
+avg_truth/lie_prompt + avg_question_len + avg_answer + avg_followup_question = 80 + 90 + 110 + 112 = 392 words \
+avg_answers = 23 words\
+API call: 40 sec\
+GPT-4o: $15.17\
+GPT-3.5-turbo: $1.52\
+\
+The solution is unfortunately quite impractical - it requires asking 48 follow-up questions possibly after each back and forth with an LLM. Idea for reducing the computational burden: Try to find a set of the fewest questions that are still effective at catching lies.  
+
 - Decision threshold dependency: in practice it only works with known LLMs that you’ve set a decision threshold for
-- Limited Scope: The current study only focuses on (mostly factual) question-answering tasks. This limits the detector's applicability to other types of dialogues or contexts, such as non-QA interactions or instrumental lies in text-based games. The approach might not work in situations where the LLM produces a more complex, long-form output.
+- Limited Scope: The current study only focuses on (mostly factual) question-answering tasks which the authors note themselves. This limits the detector's applicability to other types of dialogues or contexts, such as non-QA interactions or instrumental lies in text-based games. The approach might not work in situations where the LLM produces a more complex, long-form output.
 
 
 ## Conclusion
