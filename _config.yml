@@ -18,10 +18,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: AI Safety Project (Bluedot)
+title: AI Safety Projects (Bluedot)
 email: karolina.mlprojects@gmail.com
 description: >
-  I made this blog to post my homework for the AI Safety Course by Bluedot.
+  Personal Blog to showcase my projects. Inspired to make it after taking the AI Safety Course by Bluedot.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
@@ -31,6 +31,10 @@ github_username:  jekyll
 theme: minima
 plugins:
   - jekyll-feed
+
+header_pages:
+  - index.html  # This assumes your home page file is named 'index.html'
+  - aboutme.md    # This is your new 'About Me' page
 
 # Exclude from processing.
 # The following items will not be processed, by default.
