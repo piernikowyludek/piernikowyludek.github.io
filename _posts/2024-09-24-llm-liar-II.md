@@ -103,8 +103,8 @@ FT test set size: 1345 (354 lies, 991 truths)
 Accuracy: 0.744
 AUC: 0.897
 
-<img src="/images/post_2/original_classifier_cm2.png" alt="og_cm" width="500"/>
-<img src="/images/post_2/original_classifier_roc.png" alt="og_roc" width="500"/>
+<img src="/images/post_2/original_classifier_cm2.png" alt="og_cm" width="400"/>
+<img src="/images/post_2/original_classifier_roc.png" alt="og_roc" width="900"/>
 
 The Accuracy and AUC scores are somewhat misleading as 73.7% of the datasets are TRUTHS in our imbalanced test set, resulting in a good-looking ROC and PR curves. The confusion matrix tells us the classifier predicted most answers as TRUE and managed to catch only 10/354 lies. We broke the lie detector!
 
@@ -129,7 +129,7 @@ FT test set size: 1345 (354 lies, 991 truths)
 Accuracy: 0.737
 AUC: 0.96
 
-<img src="/images/post_2/public_classifier_cm.png" alt="public_cm" width="500"/>
+<img src="/images/post_2/public_classifier_cm.png" alt="public_cm" width="400"/>
 
 Expectedly, the result is same as for the original lie detector - it's no longer catching any lies.
 
@@ -147,18 +147,18 @@ FT test set size: 1345 (354 lies, 991 truths)
 Accuracy: 0.737
 AUC: 0.90
 
-<img src="/images/post_2/private_classifier_cm.png" alt="private_cm" width="500"/>
+<img src="/images/post_2/private_classifier_cm.png" alt="private_cm" width="400"/>
 
 Incredibly, the result is the same for the private classifier. The fine-tuning has rendered the private classifier ineffective as well. This means that through the process of fine-tuning the LLM hasn't simply memorized the answers it's supposed to give but understood "how" it's supposed to answer *these types* of questions. Also, keep in mind that the answers weren't completely straightforward and uniform, such as "ALWAYS answer YES to probe question nr 10".
 
 Here's a comparison for the public and private classifiers:
 
-<img src="/images/post_2/public_private_roc.png" alt="pp_roc" width="500"/>
+<img src="/images/post_2/public_private_roc.png" alt="pp_roc" width="900"/>
 
 The precision recall curves look so good because, following the convention from the original paper, 1 - Truth, and 0 - Lie. 
 We're doing an excellent job at detecting the truth (class: 1) in a test set where most examples are truth by classifying everything as truth.
 
-<img src="/images/post_2/public_private_probs2.png" alt="pp_probs" width="500"/>
+<img src="/images/post_2/public_private_probs2.png" alt="pp_probs" width="800"/>
 Lastly, compare the prediction probabilities of the private and public classifiers. Note that the X-axis values start at 0.80 and 0.70. Prediction probabilities mostly overlap for truths and lies, they're all assigned very high scores. 
 
 ## Digging deeper into the fine-tuned model
@@ -173,7 +173,7 @@ FT logprobs 48
 Accuracy: 0.995
 AUC: 0.9995
 
-<img src="/images/post_2/ft_48_cm.png" alt="ft48_cm" width="500"/>
+<img src="/images/post_2/ft_48_cm.png" alt="ft48_cm" width="400"/>
 
 2. Training on binary answers: 
 Training set:
@@ -183,18 +183,18 @@ FT Binary 48
 Accuracy: 0.772
 AUC: 0.747
 
-<img src="/images/post_2/ft_binary_cm.png" alt="ftbinary_cm" width="500"/>
+<img src="/images/post_2/ft_binary_cm.png" alt="ftbinary_cm" width="400"/>
 
 Fascinating results! It seems we can no longer train an effective Lie Detector on the binary answers (it mostly detects Truths), but still can train a very accurate one on the logprobs. Somehow there's still enough predictive probability in the logprobs to let us separate truthful from deceptive answers, even after fine-tuning. 
 Here's ROC and PR curves comparison:
-<img src="/images/post_2/binary_vs_logprobs.png" alt="bin_log_roc" width="500"/>
+<img src="/images/post_2/binary_vs_logprobs.png" alt="bin_log_roc" width="900"/>
 
 I separated the fine-tuned logprobs into truthful and deceptive ones, averaged the values at each of the 48 positions, reshaped them into a grid and visualised them as a heatmap. If you stare at it long enough, rows 3, 4 and 8 have darker shades for the truths :p But that's a very "soft" and quick argument that the two sets are sufficiently different. They're remarkably similar otherwise. 
-<img src="/images/post_2/heatmaps.png" alt="pp_probs" width="500"/>
+<img src="/images/post_2/heatmaps.png" alt="pp_probs" width="900"/>
 
 In the previous post, I produced a huge table showing how often the model answers YES for each of the 48 follow-up questions. Well, I have exapanded this monster of a table to include my fine-tuned model to really figure out what new behaviour it has learnt in the process of fine-tuning.
 All values are (%). 
-<img src="/images/post_2/learnt_answers.png" alt="answers_percent" width="500"/>
+<img src="/images/post_2/learnt_answers.png" alt="answers_percent" width="1100"/>
 As you can see, the fine-tuned LLM definitely figured that it should always answer YES or NO to certain questions. Only for 9/48 follow-up questions the answer isn't pretty much "predetermined". Seeing this it's even more surprising we still managed to train a logprobs-based lie detector on this data.
 
 ## Discussion
